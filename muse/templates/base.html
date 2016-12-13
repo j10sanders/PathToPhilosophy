@@ -47,10 +47,23 @@
     color: #fff !important;
 }
 
+h1{
+    font-size: 1.7em;
+  text-align: left;
+}
+h2{
+  font-family: 'Arvo', serif;
+  font-size: 1.5em;
+}
+h3{
+  font-family: 'Arvo', serif;
+  font-size: 1em;
+}
+
 </style>
 
     <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -70,8 +83,9 @@
              
 
         <div class="container">
-            <br><br>
+            <br>
             {% block content %}{% endblock %}
+            <br>
         </div>
     </body>
 </html>

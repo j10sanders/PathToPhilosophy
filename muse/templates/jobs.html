@@ -3,21 +3,21 @@
 
 <form role="form" method="POST">
 <div class="form-group">
-  <label for="level">Levels:</label>
+  <h2><label for="level">Levels:</label></h2>
   <select multiple class="form-control" id="level", name ="level">
     {% for level in all_levels %}
     <option>{{ level }}</option>
     {% endfor %}
   </select>
   <br>
-  <label for="category">Categories:</label>
+  <h2><label for="category">Categories:</label></h2>
   <select multiple class="form-control" id="category", name="category">
     {% for category in all_category %}
     <option>{{ category }}</option>
     {% endfor %}
   </select>
   <br>
-  <label for="location">Locations:</label>
+  <h2><label for="location">Locations:</label></h2>
   <select multiple class="form-control" id="location", name ="location">
     {% for location in all_locations %}
     <option>{{ location }}</option>
