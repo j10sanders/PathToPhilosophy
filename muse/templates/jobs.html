@@ -3,6 +3,13 @@
 
 <form role="form" method="POST">
 <div class="form-group">
+  <label for="level">Levels:</label>
+  <select multiple class="form-control" id="level", name ="level">
+    {% for level in all_levels %}
+    <option>{{ level }}</option>
+    {% endfor %}
+  </select>
+  <br>
   <label for="category">Categories:</label>
   <select multiple class="form-control" id="category", name="category">
     {% for category in all_category %}
@@ -12,17 +19,17 @@
   <br>
   <label for="location">Locations:</label>
   <select multiple class="form-control" id="location", name ="location">
-    {% for location in locations %}
+    {% for location in all_locations %}
     <option>{{ location }}</option>
     {% endfor %}
   </select>
   <br>
-  <label for="company">Companies:</label>
+  <!--<label for="company">Companies:</label>
   <select multiple class="form-control" id="company", name ="company">
     {% for company in companies %}
     <option>{{ company }}</option>
     {% endfor %}
-  </select>
+  </select>--->
 </div>
 <button type="submit" class="btn btn-primary btn-md" onclick = "return check();">Submit</button>
 </form>
