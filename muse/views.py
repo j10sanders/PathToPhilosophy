@@ -92,21 +92,17 @@ def test_get(payload):
     all_all = {}
     for _ in parsed_json['results']:
         names.append(_['name'])
-        all_all[_['name']] = _['company']['name']
+        all_all[_['name']] = [_['company']['name'],_['id']]
     all_category = []
-    companies = []
-    for _ in parsed_json['results']:
+    '''for _ in parsed_json['results']:
         categories = _['categories']
-        company = _['company']
         for category in categories:
-            all_category.append(category['name'])
-        for comp in [company]:
-            companies.append(comp['name'])
+            all_category.append(category['name'])'''
     
     print(all_all, "ALL ALL")
+    '''for _ in parsed_json['results']:
+        print(_['id'])'''
     
-            
-    #print(all_category)
     return render_template("test.html", all_all=all_all)
     
 @app.route("/test", methods=["POST"])
