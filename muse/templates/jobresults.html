@@ -26,12 +26,12 @@
  <ul class="pager">
        {% if page != last_page %}
         <li class="previous" >
-        <a href="{{ url_for('test_get', full_fuzzy=full_fuzzy, payload=payload, page=page+1) }}"> More Jobs</a>
+        <a href="{{ url_for('job_results_get', full_fuzzy=full_fuzzy, payload=payload, page=page+1) }}"> More Jobs</a>
         </li>
         {% endif %}
           {% if page != 1 %}
         <li class="next">
-        <a href="{{ url_for('test_get', full_fuzzy=full_fuzzy, payload=payload, page=page-1) }}"> Previous 20</a>
+        <a href="{{ url_for('job_results_get', full_fuzzy=full_fuzzy, payload=payload, page=page-1) }}"> Previous 20</a>
         </li>
         {% endif %}
     </ul>

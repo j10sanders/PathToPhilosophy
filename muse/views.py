@@ -10,8 +10,8 @@ from . import locationsearch
 api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
 
 @app.route("/")
-@app.route("/jobs", methods=["GET"])
-def jobs_get():
+@app.route("/jobcriteria", methods=["GET"])
+def job_criteria_get():
     initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
     #print(r.status_code)
     #print(r.headers['content-type'])
@@ -61,14 +61,14 @@ def jobs_get():
             companies.append(comp['name'])
     job_listings = "not yet"
     
-    return render_template('jobs.html', 
+    return render_template('jobcriteria.html', 
                             all_category=all_category, 
                             companies=sorted(companies), 
                             all_levels=all_levels,
                             job_listings=job_listings)
 
-@app.route("/jobs", methods=["POST"])
-def jobs_post():
+@app.route("/jobcriteria", methods=["POST"])
+def job_criteria_post():
     full_fuzzy=[]
     
     payload = {'page' : 1}
@@ -89,10 +89,10 @@ def jobs_post():
     
     print(payload, "PRINTING PAYLOAD1")
     print(z.url, "URL1")
-    return redirect(url_for('test_get', payload=payload, full_fuzzy=full_fuzzy, page=1))
+    return redirect(url_for('job_results_get', payload=payload, full_fuzzy=full_fuzzy, page=1))
     
-@app.route("/test/<payload>/<full_fuzzy>/<page>", methods=["GET"])
-def test_get(payload, full_fuzzy, page):
+@app.route("/jobresults/<payload>/<full_fuzzy>/<page>", methods=["GET"])
+def job_results_get(payload, full_fuzzy, page):
     payload2 = ast.literal_eval(payload)
     full_fuzzy2 = ast.literal_eval(full_fuzzy)
     payload2['page'] = page
@@ -110,15 +110,15 @@ def test_get(payload, full_fuzzy, page):
     
     print(all_all, "ALL ALL")
 
-    return render_template("test.html", all_all=all_all,
+    return render_template("jobresults.html", all_all=all_all,
                             page=int(page), 
                             full_fuzzy=full_fuzzy2,
                             payload=payload2, last_page=int(last_page))
     
-@app.route("/test", methods=["POST"])
-def test_post(payload):
+@app.route("/jobresults", methods=["POST"])
+def job_results_post(payload):
     #print(z.url)
-    return render_template("test.html")
+    return render_template("jobresults.html")
     
 @app.route("/listing/<id>", methods = ["GET"])
 def listing_get(id):
@@ -177,5 +177,5 @@ def companies_post():
     payload['categories'] = categories
     z = requests.get('https://api-v2.themuse.com/companies', params=payload)
     print(z.url)
-    return render_template('test.html', z=z)
+    return render_template('jobresults.html', z=z)
     
