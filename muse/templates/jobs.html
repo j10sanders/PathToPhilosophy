@@ -3,17 +3,24 @@
 
 <form role="form" method="POST">
 <div class="form-group">
-  <label for="category">Category:</label>
+  <label for="category">Categories:</label>
   <select multiple class="form-control" id="category", name="category">
     {% for category in all_category %}
     <option>{{ category }}</option>
     {% endfor %}
   </select>
   <br>
-  <label for="location">Location:</label>
+  <label for="location">Locations:</label>
   <select multiple class="form-control" id="location", name ="location">
     {% for location in locations %}
     <option>{{ location }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <label for="company">Companies:</label>
+  <select multiple class="form-control" id="company", name ="company">
+    {% for company in companies %}
+    <option>{{ company }}</option>
     {% endfor %}
   </select>
 </div>

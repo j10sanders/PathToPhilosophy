@@ -34,26 +34,27 @@ def jobs_get():
     #print(company_title)
     #locations = [company['locations'] for company in parsed_json['results']]
     z = []
+    companies = []
     for _ in parsed_json['results']:
         locations = _['locations']
+        company = _['company']
         for location in locations:
             #print(location['name'])
             z.append(location['name'])
+        for comp in [company]:
+            companies.append(comp['name'])
 
-    
-    #doop = [location['name'] for location in locations]
-    #print(locations)
-        
-    return render_template("jobs.html", all_category=sorted(all_category), locations=sorted(z))
+    return render_template("jobs.html", all_category=sorted(all_category), locations=sorted(z), companies=sorted(companies))
 
 @app.route("/jobs", methods=["POST"])
 def jobs_post():
     choose_locations = request.form.getlist("location")
     payload = {'page' : 1}
     categories = request.form.getlist("category")
-    print(categories)
+    companies = request.form.getlist("company")
     payload['locations'] = choose_locations
     payload['categories'] = categories
+    payload['company'] = companies
     z = requests.get('https://api-v2.themuse.com/jobs', params=payload)
     print(z.url)
     return render_template('test.html', z=z)
@@ -61,8 +62,12 @@ def jobs_post():
 @app.route("/test/z", methods=["GET"])
 def test(z):
     print(z.url)
-    return render_template("jobs.html", company_title=company_title, locations=z)
+    return render_template("test.html", z=z)
     
+@app.route("/test/z", methods=["POST"])
+def test_post(z):
+    print(z.url)
+    return render_template("joblist.html")
     
     
 @app.route("/companies", methods=["GET"])
