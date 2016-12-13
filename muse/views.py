@@ -25,7 +25,6 @@ def jobs_get():
     print(updated_request.url)
     print(parsed_json['page_count'], "PAGECOUNT")
     
-    #company_title = [(_['name'] , _['company']['name']) for _ in parsed_json['results']]
     all_category =  ['Account Management',
                     'Business & Strategy',
                     'Creative & Design',
@@ -50,6 +49,7 @@ def jobs_get():
                     'Entry Level',
                     'Mid Level',
                     'Senior Level']
+                    
     all_locations = []
     companies = []
     for _ in parsed_json['results']:
@@ -60,12 +60,14 @@ def jobs_get():
             all_locations.append(location['name'])
         for comp in [company]:
             companies.append(comp['name'])
-
+    job_listings = "not yet"
+    
     return render_template('jobs.html', 
                             all_category=all_category, 
                             all_locations=sorted(all_locations), 
                             companies=sorted(companies), 
-                            all_levels=all_levels)
+                            all_levels=all_levels,
+                            job_listings=job_listings)
 
 @app.route("/jobs", methods=["POST"])
 def jobs_post():
@@ -83,19 +85,29 @@ def jobs_post():
     
 @app.route("/test/<payload>", methods=["GET"])
 def test_get(payload):
-    #parsed_json = json.loads(z)
-    #print(payload, 'PRINTING PAYLOAD')
-    #payload_string = json.loads(payload)
-    #payload_dump = json.dumps(payload_string)
-    payload = ast.literal_eval(payload)
-    z = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload)
-    print(z.url, "URL")
+    payload2 = ast.literal_eval(payload)
+    z = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload2)
+    parsed_json = json.loads(z.text)
+    names = []
+    all_all = {}
+    for _ in parsed_json['results']:
+        names.append(_['name'])
+        all_all[_['name']] = _['company']['name']
+    all_category = []
+    companies = []
+    for _ in parsed_json['results']:
+        categories = _['categories']
+        company = _['company']
+        for category in categories:
+            all_category.append(category['name'])
+        for comp in [company]:
+            companies.append(comp['name'])
     
-    '''parsed_json = json.loads(z.url)
-    print(parsed_json)'''
-    '''for _ in parsed_json:
-        print(_['name'])'''
-    return render_template("test.html")
+    print(all_all, "ALL ALL")
+    
+            
+    #print(all_category)
+    return render_template("test.html", all_all=all_all)
     
 @app.route("/test", methods=["POST"])
 def test_post(payload):
