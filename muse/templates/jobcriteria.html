@@ -2,32 +2,35 @@
 {% block content %}
 
 <form role="form" method="POST">
-<div class="form-group">
-  <h2><label for="level">Levels:</label></h2>
+<div class="col-xs-6">
+  <h2><label for="location">Location:</label></h2>
+  <input type="text" class="form-control" id="location", name="location">
+  <br>
+  <h2><label for="level">Level (you can choose multiple):</label></h2>
   <select multiple class="form-control" id="level", name ="level">
     {% for level in all_levels %}
     <option>{{ level }}</option>
     {% endfor %}
   </select>
   <br>
-  <h2><label for="category">Categories:</label></h2>
+  <h2><label for="category">Category (required; you can choose multiple):</label></h2>
   <select multiple class="form-control" id="category", name="category" required>
     {% for category in all_category %}
     <option>{{ category }}</option>
     {% endfor %}
   </select>
   <br>
-  <h2><label for="location">Location:</label></h2>
-  <input type="text" class="form-control" id="location", name="location">
-  <br>
+  
   <!--<label for="company">Companies:</label>
   <select multiple class="form-control" id="company", name ="company">
     {% for company in companies %}
     <option>{{ company }}</option>
     {% endfor %}
   </select>--->
+  <button type="submit" class="btn btn-success btn-md" onclick = "return check();">Submit</button>
 </div>
-<button type="submit" class="btn btn-primary btn-md" onclick = "return check();">Submit</button>
+<br>
+
 </form>
 
 
