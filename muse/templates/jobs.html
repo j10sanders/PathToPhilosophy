@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form role="form" method="POST">
+<div class="form-group">
+  <label for="category">Category:</label>
+  <select multiple class="form-control" id="category", name="category">
+    {% for category in all_category %}
+    <option>{{ category }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <label for="location">Location:</label>
+  <select multiple class="form-control" id="location", name ="location">
+    {% for location in locations %}
+    <option>{{ location }}</option>
+    {% endfor %}
+  </select>
+</div>
+<button type="submit" class="btn btn-primary btn-md" onclick = "return check();">Submit</button>
+</form>
+{% endblock %}
