@@ -2,6 +2,8 @@ import requests
 import json
 from flask import render_template, request, redirect, url_for
 from . import app
+import copy
+import ast
 
 @app.route("/")
 @app.route("/jobs", methods=["GET"])
@@ -49,25 +51,37 @@ def jobs_get():
 @app.route("/jobs", methods=["POST"])
 def jobs_post():
     choose_locations = request.form.getlist("location")
-    payload = {'page' : 1}
+    payload = {"page" : 1}
     categories = request.form.getlist("category")
     companies = request.form.getlist("company")
-    payload['locations'] = choose_locations
-    payload['categories'] = categories
-    payload['company'] = companies
+    payload["locations"] = choose_locations
+    payload["categories"] = categories
+    payload["company"] = companies
     z = requests.get('https://api-v2.themuse.com/jobs', params=payload)
-    print(z.url)
-    return render_template('test.html', z=z)
+    print(payload, "PRINTING PAYLOAD1")
+    print(z.url, "URL1")
+    return redirect(url_for('test_get', payload=payload))
     
-@app.route("/test/z", methods=["GET"])
-def test(z):
-    print(z.url)
-    return render_template("test.html", z=z)
+@app.route("/test/<payload>", methods=["GET"])
+def test_get(payload):
+    #parsed_json = json.loads(z)
+    #print(payload, 'PRINTING PAYLOAD')
+    #payload_string = json.loads(payload)
+    #payload_dump = json.dumps(payload_string)
+    payload = ast.literal_eval(payload)
+    z = requests.get('https://api-v2.themuse.com/jobs', params=payload)
+    print(z.url, "URL")
     
-@app.route("/test/z", methods=["POST"])
-def test_post(z):
-    print(z.url)
-    return render_template("joblist.html")
+    '''parsed_json = json.loads(z.url)
+    print(parsed_json)'''
+    '''for _ in parsed_json:
+        print(_['name'])'''
+    return render_template("test.html")
+    
+@app.route("/test", methods=["POST"])
+def test_post(payload):
+    #print(z.url)
+    return render_template("test.html")
     
     
 @app.route("/companies", methods=["GET"])
