@@ -11,18 +11,14 @@
   </select>
   <br>
   <h2><label for="category">Categories:</label></h2>
-  <select multiple class="form-control" id="category", name="category">
+  <select multiple class="form-control" id="category", name="category" required>
     {% for category in all_category %}
     <option>{{ category }}</option>
     {% endfor %}
   </select>
   <br>
-  <h2><label for="location">Locations:</label></h2>
-  <select multiple class="form-control" id="location", name ="location">
-    {% for location in all_locations %}
-    <option>{{ location }}</option>
-    {% endfor %}
-  </select>
+  <h2><label for="location">Location:</label></h2>
+  <input type="text" class="form-control" id="location", name="location">
   <br>
   <!--<label for="company">Companies:</label>
   <select multiple class="form-control" id="company", name ="company">
@@ -33,6 +29,7 @@
 </div>
 <button type="submit" class="btn btn-primary btn-md" onclick = "return check();">Submit</button>
 </form>
+
 
 
 {% endblock %}

@@ -592,8 +592,5 @@ choices = ["Accra, Ghana",
             "Zurich, Switzerland"]
             
 def locations(something):
-   return(process.extractOne(something, choices))
+   return(process.extract(something, choices, limit=2))
    
-x = "New York"
-
-print(locations(x))

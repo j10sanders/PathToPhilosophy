@@ -1,6 +1,6 @@
 import requests
 import json
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from . import app
 import copy
 import ast
@@ -25,7 +25,6 @@ def jobs_get():
     #print(z.text)
     print(updated_request.url)
     print(parsed_json['page_count'], "PAGECOUNT")
-    
     all_category =  ['Account Management',
                     'Business & Strategy',
                     'Creative & Design',
@@ -57,7 +56,6 @@ def jobs_get():
         locations = _['locations']
         company = _['company']
         for location in locations:
-            #print(location['name'])
             all_locations.append(location['name'])
         for comp in [company]:
             companies.append(comp['name'])
@@ -65,48 +63,57 @@ def jobs_get():
     
     return render_template('jobs.html', 
                             all_category=all_category, 
-                            all_locations=sorted(all_locations), 
                             companies=sorted(companies), 
                             all_levels=all_levels,
                             job_listings=job_listings)
 
 @app.route("/jobs", methods=["POST"])
 def jobs_post():
-    choose_locations = request.form.getlist('location')
+    full_fuzzy=[]
+    
     payload = {'page' : 1}
+    choose_locations = request.form['location']
+    if len(choose_locations) != 0:
+        full_fuzzy = locationsearch.locations(choose_locations)
+        chosen_location = locationsearch.locations(choose_locations)[0][0]
+        payload['location'] = chosen_location
+    print(2)
+    
     categories = request.form.getlist('category')
     levels = request.form.getlist('level')
-    payload['location'] = choose_locations
+    
     payload['category'] = categories
     #payload['company'] = companies
     payload['level'] = levels
     z = requests.get('https://api-v2.themuse.com/jobs', params=payload)
+    
     print(payload, "PRINTING PAYLOAD1")
     print(z.url, "URL1")
-    return redirect(url_for('test_get', payload=payload))
+    return redirect(url_for('test_get', payload=payload, full_fuzzy=full_fuzzy, page=1))
     
-@app.route("/test/<payload>", methods=["GET"])
-def test_get(payload):
+@app.route("/test/<payload>/<full_fuzzy>/<page>", methods=["GET"])
+def test_get(payload, full_fuzzy, page):
     payload2 = ast.literal_eval(payload)
+    full_fuzzy2 = ast.literal_eval(full_fuzzy)
+    payload2['page'] = page
+    if len(full_fuzzy2) > 0:
+        flash("Displaying results for " + full_fuzzy2[0][0] + 
+                ".  Please change your search if you meant " + 
+                full_fuzzy2[1][0], "success")
     z = requests.get('https://api-v2.themuse.com/jobs', params=payload2)
     print(z.url, "URL2")
     parsed_json = json.loads(z.text)
-    names = []
+    last_page = parsed_json['page_count']
     all_all = {}
     for _ in parsed_json['results']:
-        names.append(_['name'])
         all_all[_['name']] = [_['company']['name'],_['id']]
-    all_category = []
-    '''for _ in parsed_json['results']:
-        categories = _['categories']
-        for category in categories:
-            all_category.append(category['name'])'''
     
     print(all_all, "ALL ALL")
-    '''for _ in parsed_json['results']:
-        print(_['id'])'''
-    
-    return render_template("test.html", all_all=all_all)
+
+    return render_template("test.html", all_all=all_all,
+                            page=int(page), 
+                            full_fuzzy=full_fuzzy2,
+                            payload=payload2, last_page=int(last_page))
     
 @app.route("/test", methods=["POST"])
 def test_post(payload):
@@ -127,10 +134,6 @@ def companies_get():
     r = requests.get('https://api-v2.themuse.com/jobs')
 
     print(r.status_code)
-    #print(r.headers['content-type'])
-    #print(r.json, "json")
-    #print(r.text, "text")
-    
     payload = {'page' : 1}
     z = requests.get('https://api-v2.themuse.com/companies', params=payload)
     print(z)
@@ -176,10 +179,3 @@ def companies_post():
     print(z.url)
     return render_template('test.html', z=z)
     
-@app.route("/location", methods=["GET"])
-def location_get():
-    
-    
-@app.route("/location", methods=["POST"])
-def location_post():
-    return render_template("test.html")
