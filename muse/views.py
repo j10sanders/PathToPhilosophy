@@ -4,6 +4,8 @@ from flask import render_template, request, redirect, url_for
 from . import app
 import copy
 import ast
+import fuzzywuzzy
+from . import locationsearch
 
 api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
 
@@ -173,3 +175,11 @@ def companies_post():
     z = requests.get('https://api-v2.themuse.com/companies', params=payload)
     print(z.url)
     return render_template('test.html', z=z)
+    
+@app.route("/location", methods=["GET"])
+def location_get():
+    
+    
+@app.route("/location", methods=["POST"])
+def location_post():
+    return render_template("test.html")
