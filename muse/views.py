@@ -10,7 +10,7 @@ api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
 @app.route("/")
 @app.route("/jobs", methods=["GET"])
 def jobs_get():
-    initial_call = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, {'page' : 1})
+    initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
     #print(r.status_code)
     #print(r.headers['content-type'])
     #print(r.json, "json")
@@ -18,8 +18,7 @@ def jobs_get():
     parsed_json = json.loads(initial_call.text)
     page = parsed_json['page_count']
     payload = {'page' : page}
-    updated_request = requests.get('https://api-v2.themuse.com/jobs?api_key=' +
-    api_key, params=payload)
+    updated_request = requests.get('https://api-v2.themuse.com/jobs', params=payload)
     print(updated_request)
     #print(z.text)
     print(updated_request.url)
@@ -74,11 +73,12 @@ def jobs_post():
     choose_locations = request.form.getlist('location')
     payload = {'page' : 1}
     categories = request.form.getlist('category')
-    companies = request.form.getlist('company')
-    payload['locations'] = choose_locations
-    payload['categories'] = categories
-    payload['company'] = companies
-    z = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload)
+    levels = request.form.getlist('level')
+    payload['location'] = choose_locations
+    payload['category'] = categories
+    #payload['company'] = companies
+    payload['level'] = levels
+    z = requests.get('https://api-v2.themuse.com/jobs', params=payload)
     print(payload, "PRINTING PAYLOAD1")
     print(z.url, "URL1")
     return redirect(url_for('test_get', payload=payload))
@@ -86,7 +86,8 @@ def jobs_post():
 @app.route("/test/<payload>", methods=["GET"])
 def test_get(payload):
     payload2 = ast.literal_eval(payload)
-    z = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload2)
+    z = requests.get('https://api-v2.themuse.com/jobs', params=payload2)
+    print(z.url, "URL2")
     parsed_json = json.loads(z.text)
     names = []
     all_all = {}
@@ -109,6 +110,14 @@ def test_get(payload):
 def test_post(payload):
     #print(z.url)
     return render_template("test.html")
+    
+@app.route("/listing/<id>", methods = ["GET"])
+def listing_get(id):
+    a = requests.get('https://api-v2.themuse.com/jobs/' + id)
+    parsed_json = json.loads(a.text)
+    #print("PARSED:", parsed_json, "PARDDED")
+    print(parsed_json["refs"]["landing_page"], "PRINTED")
+    return redirect(parsed_json["refs"]["landing_page"])
     
     
 @app.route("/companies", methods=["GET"])

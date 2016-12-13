@@ -5,7 +5,7 @@
 <h1> <b>Jobs that fit your criteria:</b></h1>
 <div class="list-group">
     {% for key, value in all_all.items() %}
-    <a href="https://api-v2.themuse.com/jobs/{{ value[1] }}" class="list-group-item">
+    <a href="{{ url_for('listing_get', id=value[1]) }}" class="list-group-item">
       <h4 class="list-group-item-heading">{{ key }}</h4>
       <p class="list-group-item-text">{{ value[0] }}</p>
     </a>
