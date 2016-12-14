@@ -12,11 +12,6 @@ api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
 @app.route("/", methods=["GET"])
 @app.route("/jobcriteria", methods=["GET"])
 def job_criteria_get():
-    initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
-    parsed_json = json.loads(initial_call.text)
-    page = parsed_json['page_count']
-    payload = {'page' : page}
-    updated_request = requests.get('https://api-v2.themuse.com/jobs', params=payload)
     all_category =  ['Account Management',
                     'Business & Strategy',
                     'Creative & Design',
@@ -53,7 +48,6 @@ def job_criteria_get():
     
     return render_template('jobcriteria.html', 
                             all_category=all_category, 
-                            #companies=sorted(companies), 
                             all_levels=all_levels)
 
 @app.route("/", methods=["POST"])
@@ -78,13 +72,16 @@ def job_results_get(payload, full_fuzzy, page):
         flash("Displaying results for " + full_fuzzy2[0][0] + 
                 ".  Please change your search if you meant " + 
                 full_fuzzy2[1][0], "success")
-    call = requests.get('https://api-v2.themuse.com/jobs', params=payload2)
+    call = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload2)
+    print(call.url)
     parsed_json = json.loads(call.text)
     last_page = parsed_json['page_count']
     all_all = {}
     for _ in parsed_json['results']:
         all_all[_['name']] = [_['company']['name'],_['id']]
     #print(all_all, "ALL ALL")
+    '''if len(all_all) == 0:
+        all_all = {"Sorry, no jobs meet your criteria :(" : " "}'''
     return render_template("jobresults.html", all_all=all_all,
                             page=int(page), 
                             full_fuzzy=full_fuzzy2,
@@ -103,11 +100,6 @@ def listing_get(id):
     
 @app.route("/companies", methods=["GET"])
 def company_criteria_get():
-    initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
-    parsed_json = json.loads(initial_call.text)
-    page = parsed_json['page_count']
-    payload = {'page' : page}
-    updated_request = requests.get('https://api-v2.themuse.com/jobs', params=payload)
     industries =  ['Advertising and Agencies',
                 'Arts and Music',
                 'Client Services',
@@ -133,7 +125,6 @@ def company_criteria_get():
     sizes = ['Small Size',
             'Medium Size',
             'Large Size']
-            
 
     return render_template('companycriteria.html', 
                             industries=industries, 
