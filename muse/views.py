@@ -9,7 +9,7 @@ from . import locationsearch
 
 api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 @app.route("/jobcriteria", methods=["GET"])
 def job_criteria_get():
     initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
@@ -56,6 +56,7 @@ def job_criteria_get():
                             #companies=sorted(companies), 
                             all_levels=all_levels)
 
+@app.route("/", methods=["POST"])
 @app.route("/jobcriteria", methods=["POST"])
 def job_criteria_post():
     full_fuzzy=[]
