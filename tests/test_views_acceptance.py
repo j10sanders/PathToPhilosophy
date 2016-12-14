@@ -15,7 +15,6 @@ class TestViews(unittest.TestCase):
     def setUp(self):
         """ Test setup """
         self.browser = Browser("phantomjs")
-
         self.process = multiprocessing.Process(target=app.run,
                                                kwargs={"port": 8080})
         self.process.start()
