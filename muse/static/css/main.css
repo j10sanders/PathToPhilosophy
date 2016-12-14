@@ -1,0 +1,67 @@
+.navbar {
+    margin-bottom: 3;
+    background-color: #53B6D0;
+    z-index: 9999;
+    border: 2;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    color: #000;
+    height: 40px;
+    max-height: 40px;
+    font-family: 'Oswald';
+  }
+  
+.navbar li a, .navbar .navbar-brand {
+      color: #000 !important;
+  }
+  
+.navbar-nav li a:hover, .navbar-nav .active a {
+      color: #fff !important;
+  }
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.btn-round-md{
+border-radius: 17px;
+}
+h1{
+    font-size: 1.7em;
+  text-align: left;
+}
+h2{
+  font-family: 'Arvo', serif;
+  font-size: 1.5em;
+}
+h3{
+  font-family: 'Arvo', serif;
+  font-size: 1em;
+}
+
+body {
+    background-color: #F5F5F5;
+}
+
+input[type=text] {
+    padding:5px; 
+    border:2px solid #ccc; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type=text]:focus {
+    border-color:#333;
+}
+
+input[type=submit] {
+    padding:5px 15px; 
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
+}
