@@ -6,17 +6,24 @@
   <h2><label for="location">Location:</label></h2>
   <input type="text" class="form-control" id="location", name="location">
   <br>
-  <h2><label for="level">Level (you can choose multiple):</label></h2>
+  <h2><label for="level">Level(s):</label></h2>
   <select multiple class="form-control" id="level", name ="level">
     {% for level in all_levels %}
     <option>{{ level }}</option>
     {% endfor %}
   </select>
   <br>
-  <h2><label for="category">Category (required; you can choose multiple):</label></h2>
-  <select multiple class="form-control" id="category", name="category" required>
+  <h2><label for="category">Category(ies):</label></h2>
+  <select multiple class="form-control" id="category", name="category">
     {% for category in all_category %}
     <option>{{ category }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <h2><label for="category">Company(ies)</label></h2>
+  <select multiple class="form-control" id="company", name="company" required>
+    {% for company in all_companies %}
+    <option>{{ company }}</option>
     {% endfor %}
   </select>
   <br>

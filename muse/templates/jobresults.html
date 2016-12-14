@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if all_all |length != 0 %}
+{% if jobs_w_companies |length != 0 %}
 
 {% if full_fuzzy |length > 1 %}
 
@@ -9,9 +9,10 @@
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
-  Displaying results for <strong>{{ first_location }}</strong>.  Did you mean <a href="{{ url_for('job_results_get', payload=payload, full_fuzzy=other_location, page=1) }}" class="alert-link">{% for key, value in other_location.items() %}{{ key }} {% endfor %}</a>?
+  Displaying results for <strong>{{ first_location }}</strong>.  Did you mean 
+  <a href="{{ url_for('job_results_get', payload=payload, full_fuzzy=other_location, page=1) }}" 
+  class="alert-link">{% for key, value in other_location.items() %}{{ key }} {% endfor %}</a>?
 </div>
-
 
 {% endif %}
 
@@ -19,7 +20,7 @@
 <div class="container">
 <h1> <b>Jobs that fit your criteria:</b></h1>
 <div class="list-group">
-    {% for key, value in all_all.items() %}
+    {% for key, value in jobs_w_companies.items() %}
     <a href="{{ url_for('listing_get', id=value[1]) }}" class="list-group-item" target="_blank">
       <h4 class="list-group-item-heading">{{ key }}</h4>
       <p class="list-group-item-text">{{ value[0] }}</p>

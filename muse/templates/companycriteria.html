@@ -13,8 +13,8 @@
     {% endfor %}
   </select>
   <br>
-  <h2><label for="industry">Industry (required; you can choose multiple):</label></h2>
-  <select multiple class="form-control" id="industry", name="industry" required>
+  <h2><label for="industry">Industry (you can choose multiple):</label></h2>
+  <select multiple class="form-control" id="industry", name="industry">
     {% for industry in industries %}
     <option>{{ industry }}</option>
     {% endfor %}
