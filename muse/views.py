@@ -98,7 +98,7 @@ def job_results_post(payload):
 def listing_get(id):
     single = requests.get('https://api-v2.themuse.com/jobs/' + id)
     parsed_json = json.loads(single.text)
-    print(parsed_json["refs"]["landing_page"], "PRINTED")
+    #print(parsed_json["refs"]["landing_page"], "PRINTED")
     return redirect(parsed_json["refs"]["landing_page"])
     
     
