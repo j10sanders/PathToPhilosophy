@@ -68,24 +68,26 @@ def job_results_get(payload, full_fuzzy, page):
     payload2 = ast.literal_eval(payload)
     full_fuzzy2 = ast.literal_eval(full_fuzzy)
     payload2['page'] = page
+    first_location, other_location = [], []
     if len(full_fuzzy2) > 0:
-        flash("Displaying results for " + full_fuzzy2[0][0] + 
-                ".  Please change your search if you meant " + 
-                full_fuzzy2[1][0], "success")
+        print(full_fuzzy2, len(full_fuzzy2))
+        if len(full_fuzzy2) == 1:
+            other_location = []
+            first_location = full_fuzzy2
+            payload2['location'] = full_fuzzy2.keys()
+        else:
+            other_location = dict([full_fuzzy2[1]])
+            first_location = full_fuzzy2[0][0]
     call = requests.get('https://api-v2.themuse.com/jobs?api_key=' + api_key, params=payload2)
-    print(call.url)
     parsed_json = json.loads(call.text)
     last_page = parsed_json['page_count']
     all_all = {}
     for _ in parsed_json['results']:
         all_all[_['name']] = [_['company']['name'],_['id']]
-    #print(all_all, "ALL ALL")
-    '''if len(all_all) == 0:
-        all_all = {"Sorry, no jobs meet your criteria :(" : " "}'''
     return render_template("jobresults.html", all_all=all_all,
                             page=int(page), 
                             full_fuzzy=full_fuzzy2,
-                            payload=payload2, last_page=int(last_page))
+                            payload=payload2, last_page=int(last_page), other_location=other_location, first_location=first_location)
     
 @app.route("/jobresults", methods=["POST"])
 def job_results_post(payload):

@@ -2,6 +2,17 @@
 {% block content %}
 
 {% if all_all |length != 0 %}
+
+{% if full_fuzzy |length > 1 %}
+
+<div class="alert alert-warning" role="alert">
+  Displaying results for <strong>{{ first_location }}</strong>.  Did you mean <a href="{{ url_for('job_results_get', payload=payload, full_fuzzy=other_location, page=1) }}" class="alert-link">{% for key, value in other_location.items() %}{{ key }} {% endfor %}</a>?
+</div>
+
+
+{% endif %}
+
+
 <div class="container">
 <h1> <b>Jobs that fit your criteria:</b></h1>
 <div class="list-group">
