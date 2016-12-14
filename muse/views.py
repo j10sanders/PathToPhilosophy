@@ -37,9 +37,9 @@ def job_criteria_get():
                     'Sales',
                     'Social Media & Community']
     all_levels = ['Internship',
-                    'Entry Level',
-                    'Mid Level',
-                    'Senior Level']
+                'Entry Level',
+                'Mid Level',
+                'Senior Level']
     '''all_locations = []
     companies = []
     for _ in parsed_json['results']:
@@ -98,57 +98,58 @@ def job_results_post(payload):
 def listing_get(id):
     single = requests.get('https://api-v2.themuse.com/jobs/' + id)
     parsed_json = json.loads(single.text)
-    #print(parsed_json["refs"]["landing_page"], "PRINTED")
     return redirect(parsed_json["refs"]["landing_page"])
     
     
 @app.route("/companies", methods=["GET"])
-def companies_get():
-    r = requests.get('https://api-v2.themuse.com/jobs')
+def company_criteria_get():
+    initial_call = requests.get('https://api-v2.themuse.com/jobs', {'page' : 1})
+    parsed_json = json.loads(initial_call.text)
+    page = parsed_json['page_count']
+    payload = {'page' : page}
+    updated_request = requests.get('https://api-v2.themuse.com/jobs', params=payload)
+    industries =  ['Advertising and Agencies',
+                'Arts and Music',
+                'Client Services',
+                'Consumer',
+                'Education',
+                'Engineering',
+                'Entertainment & Gaming',
+                'Fashion and Beauty',
+                'Finance',
+                'Food',
+                'Government',
+                'Healthcare',
+                'Law',
+                'Manufacturing',
+                'Media',
+                'Real Estate & Construction',
+                'Social Good',
+                'Social Media',
+                'Tech',
+                'Telecom',
+                'Travel and Hospitality']
+                
+    sizes = ['Small Size',
+            'Medium Size',
+            'Large Size']
+            
 
-    print(r.status_code)
+    return render_template('companycriteria.html', 
+                            industries=industries, 
+                            #companies=sorted(companies), 
+                            sizes=sizes)
+
+@app.route("/", methods=["POST"])
+@app.route("/companycriteria", methods=["POST"])
+def company_criteria_post():
+    full_fuzzy=[]
     payload = {'page' : 1}
-    z = requests.get('https://api-v2.themuse.com/companies', params=payload)
-    print(z)
-    #print(z.text)
-    print(z.url)
-    parsed_json = json.loads(z.text)
-    '''for _ in parsed_json['results']:
-        name = _['name']
-        company = _['company']
-        print(company['name'], ":", name)'''
-    
-    #company_title = [(_['name'] , _['company']['name']) for _ in parsed_json['results']]
-    all_category = []
-    for _ in parsed_json['results']:
-        categories = _['categories']
-        for category in categories:
-            #print(location['name'])
-            all_category.append(category['name'])
-    #print(company_title)
-    #locations = [company['locations'] for company in parsed_json['results']]
-    z = []
-    for _ in parsed_json['results']:
-        locations = _['locations']
-        for location in locations:
-            #print(location['name'])
-            z.append(location['name'])
-
-    
-    #doop = [location['name'] for location in locations]
-    #print(locations)
-        
-    return render_template("companies.html", all_category=all_category, locations=z)
-
-@app.route("/companies", methods=["POST"])
-def companies_post():
-    choose_locations = request.form.getlist("location")
-    payload = {'page' : 1}
-    categories = request.form.getlist("category")
-    print(categories)
-    payload['locations'] = sorted(choose_locations)
-    payload['categories'] = categories
-    z = requests.get('https://api-v2.themuse.com/companies', params=payload)
-    print(z.url)
-    return render_template('jobresults.html', z=z)
+    choose_locations = request.form['location']
+    if len(choose_locations) != 0:
+        full_fuzzy = locationsearch.locations(choose_locations)
+        payload['location'] = locationsearch.locations(choose_locations)[0][0]
+    payload['category'] = request.form.getlist('category')
+    payload['level'] = request.form.getlist('level')
+    return redirect(url_for('company_results_get', payload=payload, full_fuzzy=full_fuzzy, page=1))
     

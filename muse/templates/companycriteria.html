@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form role="form" method="POST">
+<div class="col-xs-6">
+  <h2><label for="location">Location:</label></h2>
+  <input type="text" class="form-control" id="location", name="location">
+  <br>
+  <h2><label for="size">Size (you can choose multiple):</label></h2>
+  <select multiple class="form-control" id="size", name ="size">
+    {% for size in sizes %}
+    <option>{{ size }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  <h2><label for="industry">Industry (required; you can choose multiple):</label></h2>
+  <select multiple class="form-control" id="industry", name="industry" required>
+    {% for industry in industries %}
+    <option>{{ industry }}</option>
+    {% endfor %}
+  </select>
+  <br>
+  
+  <!--<label for="company">Companies:</label>
+  <select multiple class="form-control" id="company", name ="company">
+    {% for company in companies %}
+    <option>{{ company }}</option>
+    {% endfor %}
+  </select>--->
+  <button type="submit" class="btn btn-success btn-md" onclick = "return check();">Submit</button>
+</div>
+<br>
+
+</form>
+
+
+
+{% endblock %}
