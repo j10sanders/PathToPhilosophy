@@ -21,7 +21,7 @@
   </select>
   <br>
   <h2><label for="category">Company(ies)</label></h2>
-  <select multiple class="form-control" id="company", name="company" required>
+  <select multiple class="form-control" id="company", name="company">
     {% for company in all_companies %}
     <option>{{ company }}</option>
     {% endfor %}

@@ -1,3 +1,21 @@
+# Some lists are long, so to make views.py prettier, I put them here.
+
+# Would need to do this asyncronously.  Takes about 10 seconds - so I did this
+# once and saved list below.
+'''companies = set()
+def get_companies(page=0, last_page=100):
+    call_comps = requests.get('https://api-v2.themuse.com/companies?api_key=' +
+    api_key + '&page=' + str(page))
+    parsed_json = json.loads(call_comps.text)
+    if page == 0:
+        last_page = parsed_json['page_count']
+    while page < last_page:
+        for _ in parsed_json['results']:
+            companies.add(_['name'])
+        page+=1
+        return get_companies(page, last_page)
+    return sorted(companies)'''
+
 companies = ["'wichcraft",
             '1-800-PetMeds',
             '1871',
@@ -617,3 +635,55 @@ companies = ["'wichcraft",
             'mywedding.com',
             'natrel',
             'priceline.com']
+            
+categories = ['Account Management',
+            'Business & Strategy',
+            'Creative & Design',
+            'Customer Service',
+            'Data Science',
+            'Editorial',
+            'Education',
+            'Engineering',
+            'Finance',
+            'Fundraising & Development',
+            'Healthcare & Medicine',
+            'HR & Recruiting',
+            'Legal',
+            'Marketing & PR',
+            'Operations',
+            'Project & Product Management',
+            'Retail',
+            'Sales',
+            'Social Media & Community']
+            
+levels = ['Internship',
+            'Entry Level',
+            'Mid Level',
+            'Senior Level']
+            
+industries =  ['Advertising and Agencies',
+                'Arts and Music',
+                'Client Services',
+                'Consumer',
+                'Education',
+                'Engineering',
+                'Entertainment & Gaming',
+                'Fashion and Beauty',
+                'Finance',
+                'Food',
+                'Government',
+                'Healthcare',
+                'Law',
+                'Manufacturing',
+                'Media',
+                'Real Estate & Construction',
+                'Social Good',
+                'Social Media',
+                'Tech',
+                'Telecom',
+                'Travel and Hospitality']
+                
+                
+sizes = ['Small Size',
+        'Medium Size',
+        'Large Size']

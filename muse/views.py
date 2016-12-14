@@ -5,58 +5,18 @@ from . import app
 import copy
 import ast
 import fuzzywuzzy
-from . import locationsearch, companylist
+from . import locationsearch, lists
 
 api_key = 'afb4ed7652b99475b548e55ddbca70bcb72575fa881bc2c0a652e2ec0150356b'
-companies = set()
-
-
-# Will need to do this asyncronously.  Takes about 10 seconds.
-def get_companies(page=0, last_page=100):
-    call_comps = requests.get('https://api-v2.themuse.com/companies?api_key=' +
-    api_key + '&page=' + str(page))
-    parsed_json = json.loads(call_comps.text)
-    if page == 0:
-        last_page = parsed_json['page_count']
-    while page < last_page:
-        for _ in parsed_json['results']:
-            companies.add(_['name'])
-        page+=1
-        return get_companies(page, last_page)
-    return sorted(companies)
-    
 
 # Choose criteria for job search.
 @app.route("/", methods=["GET"])
 @app.route("/jobcriteria", methods=["GET"])
 def job_criteria_get():
-    all_category =  ['Account Management',
-                    'Business & Strategy',
-                    'Creative & Design',
-                    'Customer Service',
-                    'Data Science',
-                    'Editorial',
-                    'Education',
-                    'Engineering',
-                    'Finance',
-                    'Fundraising & Development',
-                    'Healthcare & Medicine',
-                    'HR & Recruiting',
-                    'Legal',
-                    'Marketing & PR',
-                    'Operations',
-                    'Project & Product Management',
-                    'Retail',
-                    'Sales',
-                    'Social Media & Community']
-    all_levels = ['Internship',
-                'Entry Level',
-                'Mid Level',
-                'Senior Level']
     return render_template('jobcriteria.html', 
-                            all_category=all_category, 
-                            all_levels=all_levels,
-                            all_companies=companylist.companies)
+                            all_category=lists.categories, 
+                            all_levels=lists.levels,
+                            all_companies=lists.companies)
 
 # Add criteria to api call
 @app.route("/", methods=["POST"])
@@ -97,7 +57,7 @@ def job_results_get(payload, full_fuzzy, page):
             first_location = full_fuzzy2[0][0]
     call = requests.get('https://api-v2.themuse.com/jobs?api_key=' +
                         api_key, params=payload2)
-    print(call.url)
+    #print(call.url)
     parsed_json = json.loads(call.text)
     last_page = parsed_json['page_count']
     
@@ -114,10 +74,7 @@ def job_results_get(payload, full_fuzzy, page):
                             other_location=other_location,
                             first_location=first_location)
     
-@app.route("/jobresults", methods=["POST"])
-def job_results_post(payload):
-    return render_template("jobresults.html")
-    
+
 @app.route("/listing/<id>", methods = ["GET"])
 def listing_get(id):
     single = requests.get('https://api-v2.themuse.com/jobs/' + id)
@@ -125,39 +82,13 @@ def listing_get(id):
     return redirect(parsed_json["refs"]["landing_page"])
     
     
-@app.route("/companies", methods=["GET"])
+@app.route("/companycriteria", methods=["GET"])
 def company_criteria_get():
-    industries =  ['Advertising and Agencies',
-                'Arts and Music',
-                'Client Services',
-                'Consumer',
-                'Education',
-                'Engineering',
-                'Entertainment & Gaming',
-                'Fashion and Beauty',
-                'Finance',
-                'Food',
-                'Government',
-                'Healthcare',
-                'Law',
-                'Manufacturing',
-                'Media',
-                'Real Estate & Construction',
-                'Social Good',
-                'Social Media',
-                'Tech',
-                'Telecom',
-                'Travel and Hospitality']
-                
-    sizes = ['Small Size',
-            'Medium Size',
-            'Large Size']
-
     return render_template('companycriteria.html', 
-                            industries=industries, 
-                            sizes=sizes)
+                            industries=lists.industries, 
+                            sizes=lists.sizes)
 
-@app.route("/", methods=["POST"])
+
 @app.route("/companycriteria", methods=["POST"])
 def company_criteria_post():
     full_fuzzy=[]
@@ -172,4 +103,50 @@ def company_criteria_post():
                             payload=payload, 
                             full_fuzzy=full_fuzzy,
                             page=1))
+
+@app.route("/companyresults/<payload>/<full_fuzzy>/<page>", methods=["GET"])
+def company_results_get(payload, full_fuzzy, page):
+    payload2 = ast.literal_eval(payload)
+    full_fuzzy2 = ast.literal_eval(full_fuzzy)
+    payload2['page'] = page
     
+    # Fuzzy search returns top 2 matches, in order.  use first but send both on 
+    # initial request. If the user selects the second one, just send that one.
+    first_location, other_location = [], []
+    if len(full_fuzzy2) > 0:
+        if len(full_fuzzy2) == 1:
+            other_location = []
+            first_location = full_fuzzy2
+            payload2['location'] = full_fuzzy2.keys()
+        else:
+            other_location = dict([full_fuzzy2[1]])
+            first_location = full_fuzzy2[0][0]
+    call = requests.get('https://api-v2.themuse.com/companies?api_key=' +
+                        api_key, params=payload2)
+    print(call.url)
+    parsed_json = json.loads(call.text)
+    print(parsed_json, "PARSED")
+    last_page = parsed_json['page_count']
+    
+    # Send template a dictionary with {Job Title : [company name, job id]}
+    companies_w_description = {}
+    for _ in parsed_json['results']:
+        print(_['name'])
+        print(_['id'])
+        print(_['description'])
+        companies_w_description[_['name']] = [_['description'],_['id']]
+        #[_['company']['name'],_['id']]
+    return render_template("companyresults.html",
+                            companies_w_description=companies_w_description,
+                            page=int(page), 
+                            full_fuzzy=full_fuzzy2,
+                            payload=payload2,
+                            last_page=int(last_page),
+                            other_location=other_location,
+                            first_location=first_location)
+    
+@app.route("/companylisting/<id>", methods = ["GET"])
+def company_listing_get(id):
+    single = requests.get('https://api-v2.themuse.com/companies/' + id)
+    parsed_json = json.loads(single.text)
+    return redirect(parsed_json['refs']["landing_page"])
