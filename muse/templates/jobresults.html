@@ -5,7 +5,10 @@
 
 {% if full_fuzzy |length > 1 %}
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning alert-dismissible fade in" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
   Displaying results for <strong>{{ first_location }}</strong>.  Did you mean <a href="{{ url_for('job_results_get', payload=payload, full_fuzzy=other_location, page=1) }}" class="alert-link">{% for key, value in other_location.items() %}{{ key }} {% endfor %}</a>?
 </div>
 
