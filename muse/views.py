@@ -59,10 +59,9 @@ def job_results_get(payload, full_fuzzy, page):
                         api_key, params=payload2)
     parsed_json = json.loads(call.text)
     last_page = parsed_json['page_count']
-    # Send template a dictionary with {Job Title : [company name, job id]}
-    jobs_w_companies = {}
-    for _ in parsed_json['results']:
-        jobs_w_companies[_['name']] = [_['company']['name'], _['id']]
+    # Send template a dictionary with {Job Title: [company name, job id]}
+    jobs_w_companies = {_['name']: [_['company']['name'], _['id']] for _ 
+        in parsed_json['results']}
     return render_template("jobresults.html",
                             jobs_w_companies=jobs_w_companies,
                             page=int(page),
@@ -120,18 +119,11 @@ def company_results_get(payload, full_fuzzy, page):
             first_location = full_fuzzy2[0][0]
     call = requests.get('https://api-v2.themuse.com/companies?api_key=' +
                         api_key, params=payload2)
-    print(call.url)
     parsed_json = json.loads(call.text)
-    print(parsed_json, "PARSED")
     last_page = parsed_json['page_count']
-
-    # Send template a dictionary with {Job Title : [company name, job id]}
-    companies_w_description = {}
-    for _ in parsed_json['results']:
-        print(_['name'])
-        print(_['id'])
-        print(_['description'])
-        companies_w_description[_['name']] = [_['description'], _['id']]
+    # Send template a dictionary with {Company name: [company description, id]}
+    companies_w_description = {_['name']: [_['description'], _['id']] for _ 
+        in parsed_json['results']}
     return render_template("companyresults.html",
                             companies_w_description=companies_w_description,
                             page=int(page), 

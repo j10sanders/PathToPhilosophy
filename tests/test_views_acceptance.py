@@ -2,12 +2,7 @@ import os
 import unittest
 import multiprocessing
 import time
-from urllib.parse import urlparse
-
-from werkzeug.security import generate_password_hash
 from splinter import Browser
-
-
 from muse import app
 
 
@@ -30,7 +25,6 @@ class TestViews(unittest.TestCase):
         
     def tearDown(self):
         """ Test teardown """
-        # Remove the tables and their data from the database
         self.process.terminate()
         self.browser.quit()
 
