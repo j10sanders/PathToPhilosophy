@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if companies_w_description |length != 0 %}
+
 
 {% if full_fuzzy |length > 1 %}
 
@@ -15,7 +15,7 @@
 </div>
 
 {% endif %}
-
+{% if companies_w_description |length != 0 %}
 
 <div class="container">
 <h1> <b>Companies that fit your criteria:</b></h1>

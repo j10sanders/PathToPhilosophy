@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if jobs_w_companies |length != 0 %}
-
 {% if full_fuzzy |length > 1 %}
 
 <div class="alert alert-warning alert-dismissible fade in" role="alert">
@@ -15,7 +13,7 @@
 </div>
 
 {% endif %}
-
+{% if jobs_w_companies |length != 0 %}
 
 <div class="container">
 <h1> <b>Jobs that fit your criteria:</b></h1>
