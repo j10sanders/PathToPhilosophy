@@ -32,6 +32,8 @@ def job_criteria_post():
     payload['category'] = request.form.getlist('category')
     payload['level'] = request.form.getlist('level')
     payload['company'] = request.form.getlist('company')
+    if request.form.getlist('descending') == ['on']:
+        payload['descending'] = 'true'
     return redirect(url_for('job_results_get',
                             payload=payload,
                             full_fuzzy=full_fuzzy,
@@ -124,6 +126,7 @@ def company_results_get(payload, full_fuzzy, page):
     # Send template a dictionary with {Company name: [company description, id]}
     companies_w_description = {_['name']: [_['description'], _['id']] for _ 
         in parsed_json['results']}
+
     return render_template("companyresults.html",
                             companies_w_description=companies_w_description,
                             page=int(page), 
