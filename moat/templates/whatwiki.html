@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    Find the Path to Philosophy
+    
+</h1>
+<br>
+<form role="form" method="POST">
+    <div class="col-xs-6">
+        <label for="wiki">Start at Wiki page:</label>
+        <input type="text" class="form-control" id="wiki" name="wiki" placeholder="Fun, project, Moat" required>
+    
+    <br>
+  <button type="submit" class="btn btn-primary btn-md" onclick = "return check();">Submit</button>
+  </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+{% if philosophy == "no" %}
+<h1>This page didn't make it to Philosophy.  It ran into the {{ result[-1][-1] }} page twice.</h1>
+{% else %}
+<h1> <b>Path to Philosophy</b></h1>
+{% endif %}
+
+
+<div class="list-group">
+  {% for x, p in result %} 
+  <a href="https://en.wikipedia.org/wiki/{{x}}" class="list-group-item list-group-item-action">{{ p }}</a>
+  {% endfor %}
+</div>
+
+{% endblock %}

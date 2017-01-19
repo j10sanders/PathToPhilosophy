@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Path to Philosophy</title>
+
+        <!-- CSS -->
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <!-- Museing -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+        <!-- JavaScript -->
+        <!-- jQuery -->
+        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for('visit_get') }}">Path to Philosophy</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="container">
+            <br>
+            {% block content %}{% endblock %}
+            <br>
+        </div>
+    </body>
+</html>
+
+<style>
+    .navbar {
+    margin-bottom: 3;
+    background-color: #6da5a5;
+    z-index: 9999;
+    border: 2;
+    font-size: 12px !important;
+    line-height: 1.42857143 !important;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    color: #000;
+    height: 40px;
+    max-height: 40px;
+    font-family: 'Oswald', sans-serif;
+  }
+  
+.navbar li a, .navbar .navbar-brand {
+      color: #000 !important;
+  }
+  
+.navbar-nav li a:hover, .navbar-nav .active a {
+      color: #fff !important;
+  }
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.btn-round-md{
+border-radius: 17px;
+}
+h1{
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.7em;
+  text-align: left;
+}
+h2{
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5em;
+}
+h3{
+  font-family: 'Oswald', sans-serif;
+  font-size: 1em;
+}
+
+body {
+    background-color: #F5F5F5;
+    font-family: 'Oswald';
+}
+
+input[type=text] {
+    padding:5px; 
+    border:2px solid #ccc; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-family: 'Oswald';
+}
+
+input[type=text]:focus {
+    border-color:#333;
+}
+
+input[type=submit] {
+    padding:5px 15px; 
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
+    font-family: 'Oswald';
+}
+
+</style>

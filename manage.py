@@ -1,7 +1,7 @@
 import os
 from flask_script import Manager
 
-from muse import app
+from moat import app
 
 manager = Manager(app)
 
