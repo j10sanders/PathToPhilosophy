@@ -18,7 +18,10 @@ def visit_get():
 @app.route("/visit", methods=["POST"])
 def visit_post(url="https://en.wikipedia.org", topic="",
 visited=None):
-    topic = request.form['wiki']
+    if len(request.form['wiki']) > 0:
+        topic = request.form['wiki']
+    else:
+        topic = "Special:Random"
     result = visit_page.visit(topic=topic)
     philosophy = "yes"
     if result[-1] != "Philosophy":
