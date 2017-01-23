@@ -4,6 +4,8 @@
 
 {% if philosophy == "no" %}
 <h1>This page didn't make it to Philosophy.  It ran into the {{ result[-1][-1] }} page twice.</h1>
+{% elif philosophy == "invalid page" %}
+<h1>Error!  Are you sure {{ result[-1][-1] }} is a valid page?</h1>
 {% else %}
 <h1> <b>Path to Philosophy</b></h1>
 {% endif %}

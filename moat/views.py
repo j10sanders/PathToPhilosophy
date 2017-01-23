@@ -25,7 +25,10 @@ visited=None):
     result = visit_page.visit(topic=topic)
     philosophy = "yes"
     if result[-1] != "Philosophy":
-        philosophy = "no"
+        if len(result) == 1:
+            philosophy = "invalid page"
+        else:
+            philosophy = "no"
     pretty = [string.replace("_", " ") for string in result]
     result = list(zip(result, pretty))
     return (render_template('results.html', result=result, philosophy=philosophy))
