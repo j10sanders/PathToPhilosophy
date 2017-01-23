@@ -27,7 +27,7 @@ visited=None, hashed=None, i=0):
         topic = valid_url.valid_url(soup)[0][6:] # [6:] because 'wiki/'
     except ValueError:
         return visited
-    print(topic)
+    #print(topic)
     for i, word in enumerate(common):
         if word == topic:
             visited += common[i:]
